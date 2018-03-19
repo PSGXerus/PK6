@@ -40,7 +40,7 @@ This document should be a guide for future participants in the project.
 | Unit         | Component                                                                          |
 |:-------------|:----------------------------------------------------------------------------------:|
 | Compute unit | Raspberry Pi 3 B                                                                   |
-| Screen       | [Waveshare 10.1" HDMI LCD(H)](https://www.waveshare.com/wiki/10.1inch_HDMI_LCD_(H) |
+| Screen       | [Waveshare 10.1" HDMI LCD(H)](https://www.waveshare.com/wiki/10.1inch_HDMI_LCD_(H))|
 | OS           | [Raspbian Stretch](https://www.raspberrypi.org/downloads/raspbian/)                |
 
 ## 2. Milestones (Roadmap)
