@@ -17,14 +17,20 @@ hdmi_cvt 1024 600 6 0 0 0
 
 ## Software installations
 
-```
+```shell
+sudo apt update
 sudo apt install command-not-found
-sudo apt-file update
 sudo update-command-not-found
 ```
 
-```
+```shell
 sudo apt install xserver-xorg-input-evdev
 sudo mv /usr/share/X11/xorg.conf.d/40-libinput.conf /usr/share/X11/xorg.conf.d/40-libinput.conf_bak
 reboot
+```
+
+```shell
+sudo apt remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
+sudo apt autoremove
+sudo apt upgrade
 ```
