@@ -37,7 +37,7 @@ sudo apt remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python
 sudo apt autoremove
 sudo apt upgrade
 ```
-##Activate SSH Server
+## Activate SSH Server
 
 For current Raspbian versions the ssh server is already installed. Just activate it:
 
@@ -55,7 +55,7 @@ sudo /etc/init.d/ssh start
 sudo update-rc.d ssh defaults
 ```
 
-##Allow root permission via SSH
+## Allow root permission via SSH
 
 Login as user pi:
 
@@ -100,7 +100,7 @@ sudo reboot
 ```
 
 
-##Connect to Raspberry
+## Connect to Raspberry
 
 Get the IP of the pi:
 
