@@ -1,4 +1,4 @@
-#Taster- und Drehgeber-Logik in Python
+# Taster- und Drehgeber-Logik in Python
 
 Kommandobefehle für Python und GPIO Updates
 
@@ -29,7 +29,7 @@ VCC/GND:
 VCC (3.3V) | 17
 GND | 9 
 
-##Taster
+## Taster
 
 Im Kiosk Projekt kommen 3 Taster zum Einsatz. Hiervon ist 1 Taster Teil des Drehgebers, dieser wird aber genauso angesprochen wie die restlichen 2 Taster. Die Taster sind jeweils mit externen 10 kOhm Pull-Up Widerständen verbunden (Invertierte Logik).
 
@@ -47,7 +47,7 @@ GPIO.add_event_detect(tasterPin1, GPIO.FALLING, callback = call1function, bounce
 
 Informationen können mit den Callback Funktionen nur durch globale Variablen weitergereicht werden.
 
-##Drehgeber
+## Drehgeber
 
 Bei der Drehung um einen Einrastpunkt emittiert ein typischer Drehgeber auf seinen 2 Ausgangspins einen 2 Bit Gray Code. Jeder Schritt, der meistens durch einen physikalischen Klick begleitet wird, generiert dabei eine Sequenz an 5 Output Codes.
 
@@ -73,6 +73,6 @@ Die Gray Code Tabelle befindet sich in einer 7x4 Matrix (ttable)
 
 Die 2 Bit Pins des Drehgebers sind jeweils mit 10 kOhm Pull-Up Widerständen auf Vcc (3.3V am Raspberry) verbunden.
 
-##GPIO Layout für Raspberry Pi 3
+## GPIO Layout für Raspberry Pi 3
 
 ![GPIO PIN LAYOUT](https://cdn-images-1.medium.com/max/1600/1*pcfeGQr_mUJrXDFDrdKMww.png)
