@@ -1,8 +1,8 @@
 import RPi.GPIO as GPIO
 
 #Pin Belegung
-drehgeberPin1 = 13
-drehgeberPin2 = 15
+drehgeberPin1 = 16
+drehgeberPin2 = 18
 
 #Board Modus (Alternativ GPIO.BCM)
 GPIO.setmode(GPIO.BOARD)
