@@ -8,6 +8,7 @@
 - [1. Components](#1-components)
 - [2. Milestones (Roadmap)](#2-milestones-roadmap)
 - [3. Modifications on the OS](#3-modifications-on-the-os)
+- [4. Hardware](#4-hardware)
 - [Appendix](#appendix)
   - [Useful webpages](#useful-webpages)
 
@@ -47,24 +48,33 @@ This document should be a guide for future participants in the project.
 
 - [x] Building development system
 - [x] Putting touchscreen into operation
-- [ ] Creating standby logic
-    - [ ] Concept
-    - [ ] Design
-    - [ ] Test
+- [x] Creating standby logic
+    - [x] Concept
+    - [x] Design
+    - [x] Test
 - [ ] Hosting a fullscreen application
-	- [ ] Design a testing application
+	- [x] Implement button functionality
+		- [x] Build button test setup
+		- [x] Create python software drivers
+		- [ ] Solder buttons
+	- [ ] Set up GUI
+		- [x] Implement GUI
+		- [ ] Test GUI on the Raspberry 
 	- [ ] Integration
-- [ ] Adding a hideable virtual keyboard
-- [ ] Hosting a website
-	- [x] Choosing a browser
-	- [ ] Adding Forward, Back and Home buttons to the fullscreen browser
-	- [ ] Locking access to unwanted websites
-- [ ] Integrating admin access  
-...
+- [ ] Creating a case
+	- [x] Concept
+	- [x] Design
+	- [ ] Manufacture
+	- [ ] Paint
+- [x] Integrating admin access  
 
 ## 3. Modifications on the OS
 
 Mods on the OS can be found in [this](documentation/mods.md) document.
+
+## 4. Hardware
+
+Everything concerning hardware is described in [this](hw/hw.md) document.
 
 ## Appendix
 
