@@ -7,7 +7,7 @@
   - [Acronyms](#acronyms)
 - [1. Components](#1-components)
 - [2. Milestones (Roadmap)](#2-milestones-roadmap)
-- [3. Modifications on the OS](#3-modifications-on-the-os)
+- [3. Software](#3-software)
 - [4. Hardware](#4-hardware)
 - [Appendix](#appendix)
   - [Useful webpages](#useful-webpages)
@@ -56,7 +56,7 @@ This document should be a guide for future participants in the project.
 	- [x] Implement button functionality
 		- [x] Build button test setup
 		- [x] Create python software drivers
-		- [ ] Solder buttons
+		- [x] Solder buttons
 	- [ ] Set up GUI
 		- [x] Implement GUI
 		- [ ] Test GUI on the Raspberry 
@@ -68,13 +68,15 @@ This document should be a guide for future participants in the project.
 	- [ ] Paint
 - [x] Integrating admin access  
 
-## 3. Modifications on the OS
+## 3. Software
 
-Mods on the OS can be found in [this](documentation/mods.md) document.
+- Modifications on the OS can be found in [this](documentation/mods.md) document.
+- The application development is descibend in [this](documentation/app.md) document.
+- The documentation for the modified bootloader can be found [here](documentation/bootloader.md).
 
 ## 4. Hardware
 
-Everything concerning hardware is described in [this](hw/hw.md) document.
+- Everything concerning hardware is described in [this](hw/hw.md) document.
 
 ## Appendix
 
