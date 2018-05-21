@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=Kiosk-Theme
+Description=Plymouth boot script for the Raspberry Pi kiosk system for the munich university of applied sciences.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/raspberry_pi
+ScriptFile=/usr/share/plymouth/themes/raspberry_pi/raspberry_pi.script
