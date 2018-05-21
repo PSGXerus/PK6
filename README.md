@@ -76,7 +76,7 @@ This document should be a guide for future participants in the project.
 
 ## 4. Hardware
 
-- Everything concerning hardware is described in [this](hw/hw.md) document.
+- Everything concerning hardware is described in [this](documentation/hw.md) document.
 
 ## Appendix
 
