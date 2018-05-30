@@ -1,12 +1,7 @@
-# This is an example plymouth plugin script
-
 Window.SetBackgroundTopColor(0, 0, 0);
 Window.SetBackgroundBottomColor(0, 0, 0);
 
 #----------------------------------------- Animation --------------------------------
-
-for (i = 1; i <= 420; i++)
-  animation_images[i-1] = Image(i + ".png");
 
 animation_sprite = Sprite();
 animation_sprite.SetX (0);
@@ -14,40 +9,21 @@ animation_sprite.SetY (0);
 animation_sprite.SetOpacity (1);
 
 count=0;
+
 fun refresh_callback ()
   {
     if (Plymouth.GetMode () == "boot")
       {
-         animation_sprite.SetImage(animation_images[count]);
-         count++;
+	 if(count <= 313){
+                if(!(count % 2))animation_sprite.SetImage(Image(count*2 + ".png"));
+                count++;
+	 }else{
+           animation_sprite.SetImage(Image("313.png"));
+         }
       }
     else
       {
-         animation_sprite.SetImage(animation_images[419]);
+         animation_sprite.SetImage(Image("313.png"));
       }
   }
 Plymouth.SetRefreshFunction (refresh_callback);
-
-#----------------------------------------- Message --------------------------------
-
-message_sprite = Sprite();
-background_sprite = Sprite();
-
-fun display_message_callback (text)
-{
-  my_image = Image.Text(text, 1, 1, 1, 1, "Sans 12", "center" );
-  message_sprite.SetPosition(512-0.5*my_image.GetWidth() , 400, 10000);
-  message_sprite.SetImage(my_image);
-  background_sprite.SetPosition(512-0.5*my_image.GetWidth(), 400,9999);
-  background = Image("text_background.png").Scale(my_image.GetWidth() , my_image.GetHeight());
-  background_sprite.SetImage(background);
-}
-
-fun hide_message_callback (text)
-{
-  message_sprite = Sprite();
-  background_sprite = Sprite();
-}
-
-Plymouth.SetDisplayMessageFunction (display_message_callback);
-Plymouth.SetHideMessageFunction (hide_message_callback);

@@ -42,6 +42,8 @@ Refer to [further reading](#further-reading) for more information on the scripti
 $ sudo cp -r <src/bootloder/raspberry_pi> /usr/share/plymouth/themes
 $ sudo cp <image_folder>/* /usr/share/plymouth/themes/raspberry_pi
 $ sudo plymouth-set-default-theme raspberry_pi
+$ sudo cp -r <src/bootloder/plymouth-quit.service.d> /etc/systemd/system 
+$ sudo systemctl daemon-reload
 ```
 
 ## Further reading
