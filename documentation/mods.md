@@ -57,6 +57,9 @@ sudo sh -c "sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0/'
 sudo sh -c "sed -i 's/console=tty./console=tty3/g' /mnt/cmdline.txt"
 sudo umount /mnt
 sudo sh -c "sed -i 's/#kernel.printk = . . . ./kernel.printk = 0 0 0 0/g' /etc/sysctl.conf"
+sudo sh -c "sed -i 's/ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM/ExecStart=-/sbin/agetty --skip-login --noclear --noissue --login-options "-f pi" %I $TERM/' /etc/systemd/system/autologin@.service"
+sudo sh -c "sed -i 's/session    optional   pam_lastlog.so/#session    optional   pam_lastlog.so/' /etc/pam.d/login"
+sudo sh -c "sed -i 's/session    optional   pam_motd.so/#session    optional   pam_motd.so/' /etc/pam.d/login"
 sudo plymouth-set-default-theme spinfinity
 ```
 
