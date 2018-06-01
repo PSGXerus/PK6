@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import time
 
 #Pin Belegung
 tasterPin1 = 11
@@ -40,42 +41,43 @@ def call3(tasterPin3):
 def call4(drehgeberPin1):
     GPIO.remove_event_detect(drehgeberPin1)
     GPIO.remove_event_detect(drehgeberPin2)
+    state = R_START
     x = True
-    while(x)
+    while(x):
         pinstate = ((GPIO.input(drehgeberPin2) << 1)| GPIO.input(drehgeberPin1))
         state = ttable[state & 0xf][pinstate]
-
         if state ==  DIR_CW:
             print ("Rechts")
-            x = false
+            x = False
         elif state == DIR_CCW:
             print ("Links")
-            x = false
-    GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4, bouncetime = 0)
-    GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5, bouncetime = 0)
+            x = False
+    GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4, bouncetime = 200)
+    GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5, bouncetime = 200)
 
 def call5(drehgeberPin2):
     GPIO.remove_event_detect(drehgeberPin1)
     GPIO.remove_event_detect(drehgeberPin2)
+    state = R_START
     x= True
-    while(x)
+    while(x):
         pinstate = ((GPIO.input(drehgeberPin2) << 1)| GPIO.input(drehgeberPin1))
         state = ttable[state & 0xf][pinstate]
         if state ==  DIR_CW:
             print ("Rechts")
-            x = false
+            x = False
         elif state == DIR_CCW:
             print ("Links")
-            x = false
-    GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4, bouncetime = 0)
-    GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5, bouncetime = 0)
+            x = False
+    GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4, bouncetime = 200)
+    GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5, bouncetime = 200)
 
 GPIO.add_event_detect(tasterPin1, GPIO.FALLING, callback = call1, bouncetime = 200)
 GPIO.add_event_detect(tasterPin2, GPIO.FALLING, callback = call2, bouncetime = 200)
 GPIO.add_event_detect(tasterPin3, GPIO.FALLING, callback = call3, bouncetime = 200)
 
-GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4, bouncetime = 0)
-GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5, bouncetime = 0)
+GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4, bouncetime = 200)
+GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5, bouncetime = 200)
 
 try:
     #Konstanten
@@ -104,9 +106,8 @@ try:
     state = R_START
 
     while True:
-        x = 1
+        time.sleep(1)
 
 except KeyboardInterrupt:
     GPIO.cleanup()
     print ("Programm Beendet")
-GPIO.cleanup()
