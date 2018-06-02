@@ -42,6 +42,11 @@ sudo apt autoremove
 sudo apt upgrade
 ```
 
+Remove warning when starting any gtk+ application
+```shell
+sudo apt install at-spi2-core
+```
+
 ## Modifications on the bootloader
 
 In this section, devicetree overlays are used. For more information on the devicetree, check [this webpage](https://www.raspberrypi.org/documentation/configuration/device-tree.md).
