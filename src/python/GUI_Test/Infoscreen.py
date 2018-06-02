@@ -6,7 +6,7 @@ import inspect
 import RPi.GPIO as GPIO
 import threading
 import time
-from PyQt5.QtCore import QUrl, QThread
+from PyQt5.QtCore import QUrl, QThread, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWebKitWidgets import QWebView, QWebPage
 from PyQt5.QtWebKit import QWebSettings
@@ -27,66 +27,58 @@ def openFile(file):
             data = f.read()
        return data
     except OSError as e:
-        if e.errno == errno.ENOENT:            
+        if e.errno == errno.ENOENT:
             print(e)
         else:
             raise
 
 def initFileList():
-     # Get the current working directory #       
+     # Get the current working directory #
     directory = setDir()
 
     fileSet = set() # Create a set to collect the files of <directory> #
-    
+
     for root, dirs, files in os.walk(directory): # Add all file names to the set #
         for fileName in files:
             if fileName.endswith('.html'):
                 fileSet.add(os.path.join(root[len(directory):], fileName))
-    
+
     fileList = list(fileSet) # Create a list from the set to use the list functions
     fileList.sort()
-##    print(fileList)# Sort the elements
     return fileList
-    
+
 ## Global variables ##
 fileCounter = 0 # Counter to save the last shown file index #
 fileList = list() # List for the html files
 counter = 0 # Counter for the buttons
-    
+
 ###########
 ### GUI ###
 ###########
 
-## The GUI class 
+## The GUI class
 class Infoscreen(QWebView):
-    def _init_(self):
-        self.view = QWebView._init_(self)
-        #self.view = QWebView()
+
+    def __init__(self):
+        super(Infoscreen, self).__init__()
         self.setWindowTitle('Infoscreen')
         self.titleChanged.connect(self.adjustTitle)
-        
-        #directory = os.path.abspath(os.path.dirname(_file_))        
-        #directory = os.path.join(os.getcwd())       
-        #directory = os.path.abspath(os.path.dirname(sys.argv[0]))        
-        #directory = abspath(getsourcefile(lambda:0))
-        
+
     ## Set the html file into the screen
     def load(self,url):
-        #self.setUrl(QUrl(url))
         self.setHtml(url)
-        
+
     def adjustTitle(self):
         self.setWindowTitle(self.title())
-        
+
     def disableJS(self):
         settings = QWebSettings.globalSettings()
         settings.setAttribute(QWebSettings.JavascriptEnabled, False)
-    
+
     ## Show the next html file
     def forward(self):
         global fileCounter
         fileList = initFileList()
-        print(fileCounter)
         if fileCounter<8:
            fileCounter = fileCounter + 1
         else:
@@ -97,12 +89,11 @@ class Infoscreen(QWebView):
             self.load(html)
         except IndexError as e:
             print(e)
-          
+
     # Show the previous html file
     def back(self):
         global fileCounter
         fileList = initFileList()
-        print(fileCounter)
         if fileCounter>1:
             fileCounter = fileCounter - 1
         else:
@@ -114,33 +105,17 @@ class Infoscreen(QWebView):
         except IndexError as e:
             print(e)
 
+    def update(self, action):
+        if action == "fwd":
+            self.forward()
+        elif action == "bwd":
+            self.back()
+        else:
+            pass
 
-## Thread for the GUI class
-class GUI_Thread(QThread):
-    
-    # Constructor
-##    def _init_(self, threadID, name, counter):
-##        threading.Thread._init_(self)
-##        self.threadID = threadID
-##        self.name = name
-##        self.counter = counter
-        
-    def run(self):
-        #print("Starting " + self.name)
-        #threadLock.acquire()
-        
-        ## Start the application
-        
-        ## Problem: When calling app_exec here, the next pga does not show
-        #
-##        app = QApplication(sys.argv)
-        view = Infoscreen()
-        view.showMaximized()
-        view.forward()
-        #
-##        app.exec_()
-        
-        #threadLock.release()           
+    def connect_input(self, inputthread):
+        inputthread.update_signal.connect(self.update)
+
 
 
 ############
@@ -149,18 +124,16 @@ class GUI_Thread(QThread):
 
 ## Thread for the GPIO class
 class GPIO_Thread(QThread):
-    
-    # Constructor
-##    def _init_(self, threadID, name, counter):
-##        threading.Thread._init_(self)
-##        self.threadID = threadID
-##        self.name = name
-##        self.counter = counter
-        
+
+    update_signal = pyqtSignal(str,name='update')
+
+    def __init__(self):
+        super(GPIO_Thread, self).__init__()
+        #threading.Thread.__init__(self)
+        self.state = 0
+
+
     def run(self):
-        #print("Starting " + self.name)
-        #threadLock.acquire()
-        
         tasterPin1 = 11
         tasterPin2 = 13
         tasterPin3 = 15  #Taster vom Drehgeber
@@ -177,126 +150,80 @@ class GPIO_Thread(QThread):
         GPIO.setup(drehgeberPin1, GPIO.IN)
         GPIO.setup(drehgeberPin2, GPIO.IN)
 
-        value = GPIO.input(tasterPin1)
-        oldValue = 0
-        counter = 0
+        #Konstanten
+        DIR_NONE = 0x0
+        DIR_CW = 0x10
+        DIR_CCW = 0x20
 
-        def call1(tasterPin1):
-            #global counter
-            #counter = counter +1
-            #print (counter)
-            view = Infoscreen()
-            view.forward()
+        R_START = 0x0
+        R_CW_FINAL = 0x1
+        R_CW_BEGIN = 0x2
+        R_CW_NEXT = 0x3
+        R_CCW_BEGIN = 0x4
+        R_CCW_FINAL = 0x5
+        R_CCW_NEXT = 0x6
 
-        def call2(tasterPin2):
-            #global counter
-            #counter = counter -1
-            #print (counter)
-            view = Infoscreen()
-            view.back()
+        #Full Table Deklaration
+        ttable = [[R_START, R_CW_BEGIN, R_CCW_BEGIN, R_START],
+                 [R_CW_NEXT, R_START, R_CW_FINAL, R_START|DIR_CW],
+                 [R_CW_NEXT, R_CW_BEGIN, R_START, R_START],
+                 [R_CW_NEXT, R_CW_BEGIN, R_CW_FINAL, R_START],
+                 [R_CCW_NEXT, R_START, R_CCW_BEGIN, R_START],
+                 [R_CCW_NEXT, R_CCW_FINAL, R_START, R_START|DIR_CCW],
+                 [R_CCW_NEXT, R_CCW_FINAL, R_CCW_BEGIN, R_START]]
 
-        def call3(tasterPin3):
-            global counter
-            counter = 0
-            print (counter)
+        #State Vorinitialisieren
+        self.state = R_START
+
+        def call1(channel):
+            self.update_signal.emit("fwd")
+
+        def call2(channel):
+            self.update_signal.emit("bwd")
+
+        def call3(channel):
+            print("Mitte")
 
 
-        def call4(drehgeberPin1):
-            GPIO.remove_event_detect(drehgeberPin1)
-            GPIO.remove_event_detect(drehgeberPin2)
-            state = R_START
-            x = True
-            while(x):
-                pinstate = ((GPIO.input(drehgeberPin2) << 1)| GPIO.input(drehgeberPin1))
-                state = ttable[state & 0xf][pinstate]
-
-                if state ==  DIR_CW:
-                    print ("Rechts")
-                    x = False
-                elif state == DIR_CCW:
-                    print ("Links")
-                    x = False
-            GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4)
-            GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5)
-
-        def call5(drehgeberPin2):
-            GPIO.remove_event_detect(drehgeberPin1)
-            GPIO.remove_event_detect(drehgeberPin2)
-            state = R_START
-            x= True
-            while(x):
-                pinstate = ((GPIO.input(drehgeberPin2) << 1)| GPIO.input(drehgeberPin1))
-                state = ttable[state & 0xf][pinstate]
-                if state ==  DIR_CW:
-                    print ("Rechts")
-                    x = False
-                elif state == DIR_CCW:
-                    print ("Links")
-                    x = False
-            GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4)
-            GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5)
+        def call4(channel):
+            pinstate = ((GPIO.input(drehgeberPin2) << 1)| GPIO.input(drehgeberPin1))
+            self.state = ttable[self.state & 0xf][pinstate]
+            if self.state ==  DIR_CW:
+                print ("Rechts")
+            elif self.state == DIR_CCW:
+                print ("Links")
 
         GPIO.add_event_detect(tasterPin1, GPIO.FALLING, callback = call1, bouncetime = 200)
         GPIO.add_event_detect(tasterPin2, GPIO.FALLING, callback = call2, bouncetime = 200)
         GPIO.add_event_detect(tasterPin3, GPIO.FALLING, callback = call3, bouncetime = 200)
+
         GPIO.add_event_detect(drehgeberPin1, GPIO.BOTH, callback = call4)
-        GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call5)
+        GPIO.add_event_detect(drehgeberPin2, GPIO.BOTH, callback = call4)
 
-        try:
-            #Konstanten
-            DIR_NONE = 0x0
-            DIR_CW = 0x10
-            DIR_CCW = 0x20
+        while True:
+            time.sleep(1)
 
-            R_START = 0x0
-            R_CW_FINAL = 0x1
-            R_CW_BEGIN = 0x2
-            R_CW_NEXT = 0x3
-            R_CCW_BEGIN = 0x4
-            R_CCW_FINAL = 0x5
-            R_CCW_NEXT = 0x6
+    def __del__(self):
+        GPIO.cleanup()
 
-            #Full Table Deklaration
-            ttable = [[R_START, R_CW_BEGIN, R_CCW_BEGIN, R_START],
-                     [R_CW_NEXT, R_START, R_CW_FINAL, R_START|DIR_CW],
-                     [R_CW_NEXT, R_CW_BEGIN, R_START, R_START],
-                     [R_CW_NEXT, R_CW_BEGIN, R_CW_FINAL, R_START],
-                     [R_CCW_NEXT, R_START, R_CCW_BEGIN, R_START],
-                     [R_CCW_NEXT, R_CCW_FINAL, R_START, R_START|DIR_CCW],
-                     [R_CCW_NEXT, R_CCW_FINAL, R_CCW_BEGIN, R_START]]
 
-            #State Vorinitialisieren
-            state = R_START
+def main():
 
-            while True:
-                time.sleep(1)
+    app = QApplication(sys.argv)
 
-        except KeyboardInterrupt:
-            GPIO.cleanup()
-            print ("Programm Beendet")
+    ## Create the thread
+    screen = Infoscreen()
+    screen.forward()
+    screen.showMaximized()
 
-app = QApplication(sys.argv)
-#threadLock = threading.Lock()
-threads = []
+    inputthread = GPIO_Thread()
+    inputthread.start()
+    screen.connect_input(inputthread)
 
-## Create the thread
-##thread1 = GUI_Thread(None, "GUI", 1)
-##thread2 = GPIO_Thread(None, "GPIO", 2)
+    #thread.finished.connect(app.exit)
 
-thread1 = GUI_Thread()
-thread2 = GPIO_Thread()
-thread1.finished.connect(app.exit)
-thread2.finished.connect(app.exit)
-## Start them
-thread1.start()
-thread2.start()
+    sys.exit(app.exec_())
 
-## And add them to the thread list
-##threads.append(thread1)
-##threads.append(thread2)
-##
-##for i in threads:
-##    i.join()
 
-sys.exit(app.exec_())
-print("Exiting Main Thread")
+if __name__ == '__main__':
+    main()
