@@ -14,10 +14,7 @@ from PyQt5.QtNetwork import *
 
 ## Get the current working directory
 def setDir():
-##    filename = inspect.getframeinfo(inspect.currentframe()).filename
-##    directory = os.path.dirname(os.path.abspath(filename))
     directory = sys.argv[1]
-##    print(directory)
     return directory
 
 ## Open the file in the path specified by <setDir()>
@@ -72,12 +69,12 @@ class Infoscreen(QWebView):
     def disableJS(self):
         settings = QWebSettings.globalSettings()
         settings.setAttribute(QWebSettings.JavascriptEnabled, False)
-    
+
     ## Close app when the specified key was pressed
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Escape: 
+        if event.key() == Qt.Key_Escape:
             self.close()
-    
+
     def switchPage(self, fileIndex):
         fileList = initFileList()
         try:
@@ -86,47 +83,15 @@ class Infoscreen(QWebView):
             self.setHtml(html)
         except IndexError as e:
             print(e)
-    
-    ## Show the next html file
-##    def forward(self):
-##        global fileCounter
-##        fileList = initFileList()
-##        if fileCounter<8:
-##           fileCounter = fileCounter + 1
-##        else:
-##            fileCounter = 1
-##        try:
-##            file = fileList[fileCounter]
-##            html = openFile(file)
-##            self.load(html)
-##        except IndexError as e:
-##            print(e)
-##
-##    # Show the previous html file
-##    def back(self):
-##        global fileCounter
-##        fileList = initFileList()
-##        if fileCounter>1:
-##            fileCounter = fileCounter - 1
-##        else:
-##            fileCounter = 8
-##        try:
-##            file = fileList[fileCounter]
-##            html = openFile(file)
-##            self.load(html)
-##        except IndexError as e:
-##            print(e)
 
     def update(self, action):
         global fileCounter
         fileIndex = len(initFileList())
-##        print(fileIndex)
-##        print(fileCounter)
         if action == "fwd":
             if fileCounter<fileIndex-1:
                 fileCounter = fileCounter + 1
             else:
-                fileCounter = 1
+                fileCounter = 0
             self.switchPage(fileCounter)
         elif action == "bwd":
             if fileCounter>1:
@@ -134,6 +99,13 @@ class Infoscreen(QWebView):
             else:
                 fileCounter = fileIndex-1
             self.switchPage(fileCounter)
+        elif action == "home":
+            fileCounter = 0
+            self.switchPage(fileCounter)
+        elif action == "up":
+            self.page().mainFrame().scroll(0,-100)
+        elif action == "down":
+            self.page().mainFrame().scroll(0,100)
         else:
             pass
 
@@ -206,16 +178,16 @@ class GPIO_Thread(QThread):
             self.update_signal.emit("bwd")
 
         def call3(channel):
-            print("Mitte")
+            self.update_signal.emit("home")
 
 
         def call4(channel):
             pinstate = ((GPIO.input(drehgeberPin2) << 1)| GPIO.input(drehgeberPin1))
             self.state = ttable[self.state & 0xf][pinstate]
             if self.state ==  DIR_CW:
-                print ("Rechts")
+                self.update_signal.emit("down")
             elif self.state == DIR_CCW:
-                print ("Links")
+                self.update_signal.emit("up")
 
         GPIO.add_event_detect(tasterPin1, GPIO.FALLING, callback = call1, bouncetime = 200)
         GPIO.add_event_detect(tasterPin2, GPIO.FALLING, callback = call2, bouncetime = 200)
@@ -230,6 +202,9 @@ class GPIO_Thread(QThread):
     def __del__(self):
         GPIO.cleanup()
 
+############
+### MAIN ###
+############
 
 def main():
 
@@ -237,20 +212,12 @@ def main():
 
     ## Create the thread
     screen = Infoscreen()
-    screen.switchPage(1)
-##    screen.showMaximized()
+    screen.switchPage(0)
     screen.showFullScreen()
-##    self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-##    self.setFixedSize(self.size())
-##    geometry = app.desktop().availableGeometry()
-##    self.setGeometry(geometry)
-
 
     inputthread = GPIO_Thread()
     inputthread.start()
     screen.connect_input(inputthread)
-
-    #thread.finished.connect(app.exit)
 
     sys.exit(app.exec_())
 
