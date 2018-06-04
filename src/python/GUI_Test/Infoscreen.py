@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import PyQt5
 import sys
 import os.path
@@ -14,6 +15,9 @@ from PyQt5.QtNetwork import *
 
 ## Get the current working directory
 def setDir():
+    if len(sys.argv) is 1:
+    	print("Please specify HTML directory as first argument")
+    	sys.exit()
     directory = sys.argv[1]
     return directory
 
@@ -94,7 +98,7 @@ class Infoscreen(QWebView):
                 fileCounter = 0
             self.switchPage(fileCounter)
         elif action == "bwd":
-            if fileCounter>1:
+            if fileCounter>0:
                 fileCounter = fileCounter -1
             else:
                 fileCounter = fileIndex-1
