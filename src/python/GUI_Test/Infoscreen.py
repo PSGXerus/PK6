@@ -6,7 +6,7 @@ import inspect
 import RPi.GPIO as GPIO
 import threading
 import time
-from PyQt5.QtCore import QUrl, QThread, pyqtSignal
+from PyQt5.QtCore import QUrl, QThread, pyqtSignal, Qt
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWebKitWidgets import QWebView, QWebPage
 from PyQt5.QtWebKit import QWebSettings
@@ -14,8 +14,10 @@ from PyQt5.QtNetwork import *
 
 ## Get the current working directory
 def setDir():
-    filename = inspect.getframeinfo(inspect.currentframe()).filename
-    directory = os.path.dirname(os.path.abspath(filename))
+##    filename = inspect.getframeinfo(inspect.currentframe()).filename
+##    directory = os.path.dirname(os.path.abspath(filename))
+    directory = sys.argv[1]
+##    print(directory)
     return directory
 
 ## Open the file in the path specified by <setDir()>
@@ -64,52 +66,74 @@ class Infoscreen(QWebView):
         self.setWindowTitle('Infoscreen')
         self.titleChanged.connect(self.adjustTitle)
 
-    ## Set the html file into the screen
-    def load(self,url):
-        self.setHtml(url)
-
     def adjustTitle(self):
         self.setWindowTitle(self.title())
 
     def disableJS(self):
         settings = QWebSettings.globalSettings()
         settings.setAttribute(QWebSettings.JavascriptEnabled, False)
-
+    
+    ## Close app when the specified key was pressed
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape: 
+            self.close()
+    
+    def switchPage(self, fileIndex):
+        fileList = initFileList()
+        try:
+            file = fileList[fileIndex]
+            html = openFile(file)
+            self.setHtml(html)
+        except IndexError as e:
+            print(e)
+    
     ## Show the next html file
-    def forward(self):
-        global fileCounter
-        fileList = initFileList()
-        if fileCounter<8:
-           fileCounter = fileCounter + 1
-        else:
-            fileCounter = 1
-        try:
-            file = fileList[fileCounter]
-            html = openFile(file)
-            self.load(html)
-        except IndexError as e:
-            print(e)
-
-    # Show the previous html file
-    def back(self):
-        global fileCounter
-        fileList = initFileList()
-        if fileCounter>1:
-            fileCounter = fileCounter - 1
-        else:
-            fileCounter = 8
-        try:
-            file = fileList[fileCounter]
-            html = openFile(file)
-            self.load(html)
-        except IndexError as e:
-            print(e)
+##    def forward(self):
+##        global fileCounter
+##        fileList = initFileList()
+##        if fileCounter<8:
+##           fileCounter = fileCounter + 1
+##        else:
+##            fileCounter = 1
+##        try:
+##            file = fileList[fileCounter]
+##            html = openFile(file)
+##            self.load(html)
+##        except IndexError as e:
+##            print(e)
+##
+##    # Show the previous html file
+##    def back(self):
+##        global fileCounter
+##        fileList = initFileList()
+##        if fileCounter>1:
+##            fileCounter = fileCounter - 1
+##        else:
+##            fileCounter = 8
+##        try:
+##            file = fileList[fileCounter]
+##            html = openFile(file)
+##            self.load(html)
+##        except IndexError as e:
+##            print(e)
 
     def update(self, action):
+        global fileCounter
+        fileIndex = len(initFileList())
+##        print(fileIndex)
+##        print(fileCounter)
         if action == "fwd":
-            self.forward()
+            if fileCounter<fileIndex-1:
+                fileCounter = fileCounter + 1
+            else:
+                fileCounter = 1
+            self.switchPage(fileCounter)
         elif action == "bwd":
-            self.back()
+            if fileCounter>1:
+                fileCounter = fileCounter -1
+            else:
+                fileCounter = fileIndex-1
+            self.switchPage(fileCounter)
         else:
             pass
 
@@ -213,8 +237,14 @@ def main():
 
     ## Create the thread
     screen = Infoscreen()
-    screen.forward()
-    screen.showMaximized()
+    screen.switchPage(1)
+##    screen.showMaximized()
+    screen.showFullScreen()
+##    self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+##    self.setFixedSize(self.size())
+##    geometry = app.desktop().availableGeometry()
+##    self.setGeometry(geometry)
+
 
     inputthread = GPIO_Thread()
     inputthread.start()
