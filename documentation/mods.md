@@ -22,6 +22,7 @@ hdmi_cvt 1024 600 6 0 0 0
 ## Software installations
 
 Very useful tool for missing packages
+
 ```shell
 sudo apt update
 sudo apt install command-not-found
@@ -29,6 +30,7 @@ sudo update-command-not-found
 ```
 
 Fix touchscreen pointing device
+
 ```shell
 sudo apt install xserver-xorg-input-evdev
 sudo mv /usr/share/X11/xorg.conf.d/40-libinput.conf /usr/share/X11/xorg.conf.d/40-libinput.conf_bak
@@ -36,6 +38,7 @@ reboot
 ```
 
 Uninstall stuff that is not needed
+
 ```shell
 sudo apt remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
 sudo apt autoremove
@@ -43,8 +46,19 @@ sudo apt upgrade
 ```
 
 Remove warning when starting any gtk+ application
+
 ```shell
 sudo apt install at-spi2-core
+```
+
+Install packages for the Python PyQt graphical user interface
+
+```
+sudo apt-get update
+sudo apt-get install qt5-default pyqt5-dev pyqt5-dev-tools
+sudo apt-get install python3-pyqt5
+sudo apt-get install python3-pyqt5.qtwebkit
+reboot
 ```
 
 ## Modifications on the bootloader
