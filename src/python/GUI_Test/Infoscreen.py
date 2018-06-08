@@ -18,7 +18,7 @@ def setDir():
     if len(sys.argv) is 1:
     	print("Please specify HTML directory as first argument")
     	sys.exit()
-    directory = sys.argv[1]
+    directory = os.path.join(os.path.abspath(sys.argv[1]), '')
     return directory
 
 ## Open the file in the path specified by <setDir()>
@@ -53,7 +53,6 @@ def initFileList():
 ## Global variables ##
 fileCounter = 0 # Counter to save the last shown file index #
 fileList = list() # List for the html files
-counter = 0 # Counter for the buttons
 
 ###########
 ### GUI ###
@@ -84,7 +83,7 @@ class Infoscreen(QWebView):
         try:
             file = fileList[fileIndex]
             html = openFile(file)
-            self.setHtml(html)
+            self.setHtml(html,QUrl.fromLocalFile(setDir()))
         except IndexError as e:
             print(e)
 
