@@ -11,7 +11,7 @@ if [ -z "$1" ]
     exit
 fi
 
-if [ ! -d "/home/pi"]
+if [ ! -d "/home/pi" ]
   then
     echo Kann nur auf einem Raspberry Pi installiert werden
     exit
@@ -22,32 +22,30 @@ chk_root
 #Pre Boot Modifications
 sudo echo -e "max_usb_current=1\nhdmi_group=2\nhdmi_mode=1\nhdmi_mode=87\nhdmi_cvt 1024 600 6 0 0 0 >> /boot/config.txt"
 
-#Usefull tool for missing packages
+#Uninstall unused software
+sudo apt -y remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
+sudo apt -y autoremove
 sudo apt update
-sudo apt install command-not-found
+sudo apt -y upgrade
+
+#Usefull tool for missing packages
+sudo apt -y install command-not-found
 sudo update-command-not-found
 
 #Hiding mouse pointer
-sudo apt install unclutter
+sudo apt -y install unclutter
 
 #Fix Touchscreen pointing device
-sudo apt install xserver-xorg-input-evdev
+sudo apt -y install xserver-xorg-input-evdev
 sudo mv /usr/share/X11/xorg.conf.d/40-libinput.conf /usr/share/X11/xorg.conf.d/40-libinput.conf_bak
 
-#Uninstall unused software
-sudo apt remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
-sudo apt autoremove
-sudo apt update
-sudo apt upgrade
-
 #Remove warning when starting any gtk+ application
-sudo apt install at-spi2-core
+sudo apt -y install at-spi2-core
 
 #Install packages for the Python PyQt graphical user interface
-sudo apt update
-sudo apt install qt5-default pyqt5-dev pyqt5-dev-tools
-sudo apt install python3-pyqt5
-sudo apt install python3-pyqt5.qtwebkit
+sudo apt install -y qt5-default pyqt5-dev pyqt5-dev-tools
+sudo apt install -y python3-pyqt5
+sudo apt install -y python3-pyqt5.qtwebkit
 
 #Modifications on Bootloader
 #ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off
@@ -66,7 +64,7 @@ echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 0" > /home/pi/.conf
 ### SSH Configuration
 #Activate SSH Server
 #
-sudo apt install ssh
+sudo apt -y install ssh
 sudo /etc/init.d/ssh start
 sudo update-rc.d ssh defaults
 #
