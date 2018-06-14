@@ -9,7 +9,14 @@ chk_root () {
 
 if [ -z "$1" ]
   then
-    echo "Bitte IP Adresse als Argument uebergeben"
+    echo Bitte IP Adresse als Argument uebergeben
+    exit
+fi
+
+if [ ! -d "/home/pi"]
+  then
+    echo Kann nur auf einem Raspberry Pi installiert werden
+    exit
 fi
 
 chk_root
@@ -56,8 +63,8 @@ sudo sh -c "sed -i 's/session    optional   pam_motd.so/#session    optional   p
 sudo plymouth-set-default-theme spinfinity
 
 
-#Edit Autostart LXDE-pi fuer Cursor hiden
-echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 1" > /home/pi/.config/lxsession/LXDE-pi/autostart
+#Edit Autostart LXDE-pi fuer Cursor hiden (idle TIME)
+echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 0" > /home/pi/.config/lxsession/LXDE-pi/autostart
 
 ### SSH Configuration
 #Activate SSH Server
@@ -69,6 +76,13 @@ sudo update-rc.d ssh defaults
 #Allow Root Permissions via SSH
 sudo sh -c "sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config"
 ###
+
+#Install Skript etc
+sudo mkdir -p /usr/share/infoscreen
+sudo mv ./html/Infoscreen.py /usr/bin/Infoscreen
+sudo mv ./html/* /usr/share/infoscreen
+sudo rmdir ./html
+
 
 
 #Remove Sudo Rights for User
