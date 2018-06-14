@@ -83,7 +83,11 @@ sudo mv ./html/Infoscreen.py /usr/bin/Infoscreen
 sudo mv ./html/* /usr/share/infoscreen
 sudo rmdir ./html
 
-
+#Install Splash Infoscreen
+sudo cp -r ./splashscreen/raspberry_pi /usr/share/plymouth/themes
+sudo plymouth-set-default-theme raspberry_pi
+sudo cp -r ./plymouth-quit.service.d /etc/systemd/system
+sudo systemctl daemon-reload
 
 #Remove Sudo Rights for User
 sudo rm /etc/sudoers.d/010.pi-nopasswd
