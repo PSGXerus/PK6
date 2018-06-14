@@ -22,6 +22,9 @@ sudo apt update
 sudo apt install command-not-found
 sudo update-command-not-found
 
+#Hiding mouse pointer
+sudo apt install unclutter
+
 #Fix Touchscreen pointing device
 sudo apt install xserver-xorg-input-evdev
 sudo mv /usr/share/X11/xorg.conf.d/40-libinput.conf /usr/share/X11/xorg.conf.d/40-libinput.conf_bak
@@ -35,15 +38,15 @@ sudo apt upgrade
 sudo apt install at-spi2-core
 
 #Install packages for the Python PyQt graphical user interface
-sudo apt-get update
-sudo apt-get install qt5-default pyqt5-dev pyqt5-dev-tools
-sudo apt-get install python3-pyqt5
-sudo apt-get install python3-pyqt5.qtwebkit
+sudo apt update
+sudo apt install qt5-default pyqt5-dev pyqt5-dev-tools
+sudo apt install python3-pyqt5
+sudo apt install python3-pyqt5.qtwebkit
 
 #Modifications on Bootloader
 sudo mount -t auto /dev/mmcblk0p1 /mnt/
 sudo sh -c "echo dtoverlay=gpio-poweroff,active_low="y"\ndtoverlay=gpio-shutdown,gpio_pin=20 >> /mnt/config.txt"
-sudo sh -c "sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0/' /mnt/cmdline.txt"
+sudo sh -c "sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0 ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off/' /mnt/cmdline.txt"
 sudo sh -c "sed -i 's/console=tty./console=tty3/g' /mnt/cmdline.txt"
 sudo umount /mnt
 sudo sh -c "sed -i 's/#kernel.printk = . . . ./kernel.printk = 0 0 0 0/g' /etc/sysctl.conf"
@@ -52,22 +55,14 @@ sudo sh -c "sed -i 's/session    optional   pam_lastlog.so/#session    optional 
 sudo sh -c "sed -i 's/session    optional   pam_motd.so/#session    optional   pam_motd.so/' /etc/pam.d/login"
 sudo plymouth-set-default-theme spinfinity
 
-### Network Configuration
-#Set Static IP
-sudo ifconfig eth0 down;
-#IP Adress
-sudo ifconfig eth0 10.27.210.71 24;
-sudo ifconfig eth0 up
-#Gateway IP
-sudo route add default gw 10.27.64.1; 
-#DNS Server
-sudo echo nameserver 192.168.1.1 > /etc/resolv.conf;
-###
+
+#Edit Autostart LXDE-pi fuer Cursor hiden
+echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 1" > /home/pi/.config/lxsession/LXDE-pi/autostart
 
 ### SSH Configuration
 #Activate SSH Server
 #
-sudo apt-get install ssh
+sudo apt install ssh
 sudo /etc/init.d/ssh start
 sudo update-rc.d ssh defaults
 #
