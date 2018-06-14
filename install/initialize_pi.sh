@@ -51,11 +51,9 @@ sudo apt install python3-pyqt5
 sudo apt install python3-pyqt5.qtwebkit
 
 #Modifications on Bootloader
-sudo mount -t auto /dev/mmcblk0p1 /mnt/
-sudo sh -c "echo dtoverlay=gpio-poweroff,active_low="y"\ndtoverlay=gpio-shutdown,gpio_pin=20 >> /mnt/config.txt"
-sudo sh -c "sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0 ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off/' /mnt/cmdline.txt"
-sudo sh -c "sed -i 's/console=tty./console=tty3/g' /mnt/cmdline.txt"
-sudo umount /mnt
+sudo sh -c "echo dtoverlay=gpio-poweroff,active_low="y"\ndtoverlay=gpio-shutdown,gpio_pin=20 >> /boot/config.txt"
+sudo sh -c "sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0 ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off/' /boot/cmdline.txt"
+sudo sh -c "sed -i 's/console=tty./console=tty3/g' /boot/cmdline.txt"
 sudo sh -c "sed -i 's/#kernel.printk = . . . ./kernel.printk = 0 0 0 0/g' /etc/sysctl.conf"
 sudo sh -c "sed -i 's/ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM/ExecStart=-/sbin/agetty --skip-login --noclear --noissue --login-options "-f pi" %I $TERM/' /etc/systemd/system/autologin@.service"
 sudo sh -c "sed -i 's/session    optional   pam_lastlog.so/#session    optional   pam_lastlog.so/' /etc/pam.d/login"
