@@ -73,7 +73,7 @@ This document should be a guide for future participants in the project.
 ## 3. Software
 
 - Modifications on the OS can be found in [this](documentation/mods.md) document.
-- The application development is descibend in [this](documentation/app.md) document.
+- The application development is descibend in [this](documentation/sw.md) document.
 - The documentation for the modified bootloader can be found [here](documentation/bootloader.md).
 
 ## 4. Hardware
