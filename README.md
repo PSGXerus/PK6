@@ -1,4 +1,4 @@
-# Raspberry Pi 3 powered touchscreen kiosk
+# Raspberry Pi 3 powered kiosk
 
 - [Introduction](#introduction)
   - [Scope](#scope)
@@ -9,6 +9,7 @@
 - [2. Milestones (Roadmap)](#2-milestones-roadmap)
 - [3. Software](#3-software)
 - [4. Hardware](#4-hardware)
+- [5. Power consumption](#5-power-consumption)
 - [Appendix](#appendix)
   - [Useful webpages](#useful-webpages)
 
@@ -52,21 +53,22 @@ This document should be a guide for future participants in the project.
     - [x] Concept
     - [x] Design
     - [x] Test
-- [ ] Hosting a fullscreen application
+- [x] Hosting a fullscreen application
 	- [x] Implement button functionality
 		- [x] Build button test setup
 		- [x] Create python software drivers
 		- [x] Solder buttons
-	- [ ] Set up GUI
+	- [x] Set up GUI
 		- [x] Implement GUI
-		- [ ] Test GUI on the Raspberry 
-	- [ ] Integration
-- [ ] Creating a case
+		- [x] Test GUI on the Raspberry 
+	- [x] Integration
+- [x] Creating a case
 	- [x] Concept
 	- [x] Design
-	- [ ] Manufacture
-	- [ ] Paint
-- [x] Integrating admin access  
+	- [x] Manufacture
+	- [x] Paint
+- [x] Integrating admin access
+- [ ] Writing setup-bashscript
 
 ## 3. Software
 
@@ -78,12 +80,17 @@ This document should be a guide for future participants in the project.
 
 - Everything concerning hardware is described in [this](documentation/hw.md) document.
 
+## 5. Power consumption
+
+|Nominal Voltage|Measured Current|Consumed Power|
+|---------------|----------------|--------------|
+|12V            |~0.5A           |~6W           |
+
 ## Appendix
 
 ### Useful webpages
   
-[Add a power button to the Raspberry](https://howchoo.com/g/mwnlytk3zmm/how-to-add-a-power-button-to-your-raspberry-pi)  
-[Automatically disappearing virtual keyboard](https://raspberrypi.stackexchange.com/questions/61142/how-to-make-onscreen-keyboard-automatically-pop-up-when-entering-input-field)  
+[Add a power button to the Raspberry](https://howchoo.com/g/mwnlytk3zmm/how-to-add-a-power-button-to-your-raspberry-pi)
 [Original project descripton (DE)](http://www.netzmafia.de/skripten/hardware/RasPi/Projekt-Kiosk/)  
 [Pi 3 Kiosk (DE)](https://itrig.de/index.php?/archives/2309-Raspberry-Pi-3-Kiosk-Chromium-Autostart-im-Vollbildmodus-einrichten.html)  
 [Various Information on the Raspberry Pi (DE)](http://www.elektronik-kompendium.de/sites/raspberry-pi/index.htm)  
