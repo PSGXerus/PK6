@@ -34,13 +34,10 @@ Refer to [further reading](#further-reading) for more information on the scripti
 
 ## Installing the splash screen from this repository
 
-1. Render the pngs from the blender project.
-2. Remove the leading "0" from the file names. In linux with `rename -n 's/^0*//' *` (remove the `-n` switch for "dry run" when satisfied with the results).
-3. Execute the following commands.
+Execute the following commands.
  
 ```shell
 $ sudo cp -r <src/bootloder/raspberry_pi> /usr/share/plymouth/themes
-$ sudo cp <image_folder>/* /usr/share/plymouth/themes/raspberry_pi
 $ sudo plymouth-set-default-theme raspberry_pi
 $ sudo cp -r <src/bootloder/plymouth-quit.service.d> /etc/systemd/system 
 $ sudo systemctl daemon-reload

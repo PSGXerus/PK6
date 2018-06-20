@@ -8,22 +8,22 @@ animation_sprite.SetX (0);
 animation_sprite.SetY (0);
 animation_sprite.SetOpacity (1);
 
-count=0;
+count=1;
 
 fun refresh_callback ()
   {
     if (Plymouth.GetMode () == "boot")
       {
-	 if(count <= 313){
-                if(!(count % 2))animation_sprite.SetImage(Image(count*2 + ".png"));
+	 if(count <= 157){
+                animation_sprite.SetImage(Image(count + ".png"));
                 count++;
 	 }else{
-           animation_sprite.SetImage(Image("313.png"));
+           animation_sprite.SetImage(Image("157.png"));
          }
       }
     else
       {
-         animation_sprite.SetImage(Image("313.png"));
+         animation_sprite.SetImage(Image("157.png"));
       }
   }
 Plymouth.SetRefreshFunction (refresh_callback);
