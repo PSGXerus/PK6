@@ -1,23 +1,21 @@
 #!/bin/bash
 
 if [ ! $( id -u ) -eq 0 ]; then
-  echo Must be run as root
+  echo Bitte als root ausführen!
   exit
 fi
 
-if [ -z "$1" ]
-  then
-    echo Bitte IP Adresse als Argument uebergeben
-    exit
-fi
 
 if [ ! -d "/home/pi" ]
   then
-    echo Kann nur auf einem Raspberry Pi installiert werden
+    echo Kann nur auf einem Raspberry Pi installiert werden!
     exit
 fi
 
-chk_root
+if [ $(dirname $0) != "." ]; then
+  echo Bitte vorher ins installverzeichnis wechseln!
+  exit
+fi
 
 #Pre Boot Modifications
 sudo echo -e "max_usb_current=1\nhdmi_group=2\nhdmi_mode=1\nhdmi_mode=87\nhdmi_cvt 1024 600 6 0 0 0 >> /boot/config.txt"
@@ -47,12 +45,12 @@ sudo apt -y install python3-pyqt5.qtwebkit
 #ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off
 #sudo sh -c "echo dtoverlay=gpio-poweroff,active_low="y"\ndtoverlay=gpio-shutdown,gpio_pin=20 >> /boot/config.txt"
 
-sudo sh -c "sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0/' /boot/cmdline.txt"
-sudo sh -c "sed -i 's/console=tty./console=tty3/g' /boot/cmdline.txt"
-sudo sh -c "sed -i 's/#kernel.printk = . . . ./kernel.printk = 0 0 0 0/g' /etc/sysctl.conf"
-sudo sh -c "sed -i 's/ExecStart=-/sbin/agetty --autologin pi --noclear %I $TERM/ExecStart=-/sbin/agetty --skip-login --noclear --noissue --login-options "-f pi" %I $TERM/' /etc/systemd/system/autologin@.service"
-sudo sh -c "sed -i 's/session    optional   pam_lastlog.so/#session    optional   pam_lastlog.so/' /etc/pam.d/login"
-sudo sh -c "sed -i 's/session    optional   pam_motd.so/#session    optional   pam_motd.so/' /etc/pam.d/login"
+sudo sed -i 's/$/ logo.nologo consoleblank=0 vt.global_cursor_default=0/' /boot/cmdline.txt
+sudo sed -i 's/console=tty./console=tty3/g' /boot/cmdline.txt
+sudo sed -i 's/#kernel.printk = . . . ./kernel.printk = 0 0 0 0/g' /etc/sysctl.conf
+sudo sed -i 's/ExecStart=-\/sbin\/agetty --autologin pi --noclear \%I \$TERM/ExecStart=-\/sbin\/agetty --skip-login --noclear --noissue --login-options \"-f pi\" \%I \$TERM/' /etc/systemd/system/autologin@.service
+sudo sed -i 's/session    optional   pam_lastlog.so/#session    optional   pam_lastlog.so/' /etc/pam.d/login
+sudo sed -i 's/session    optional   pam_motd.so/#session    optional   pam_motd.so/' /etc/pam.d/login
 
 #Edit Autostart LXDE-pi fuer Cursor hiden (idle TIME)
 echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 0" > /home/pi/.config/lxsession/LXDE-pi/autostart
@@ -71,7 +69,8 @@ sudo sh -c "sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/g'
 #Install Skript etc
 sudo mkdir -p /usr/share/infoscreen
 sudo cp -r ../src/python/GUI_Test/Infoscreen.py /usr/bin/Infoscreen
-sudo cp -r ../src/python/GUI_Test/!(Infoscreen.py) /usr/share/infoscreen
+sudo cp ../src/python/GUI_Test/* /usr/share/infoscreen
+sudo rm /usr/share/infoscreen/Infoscreen.py
 
 #Install Splash Infoscreen
 sudo cp -r ../src/bootloader/raspberry_pi /usr/share/plymouth/themes
