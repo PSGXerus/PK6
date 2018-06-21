@@ -35,17 +35,13 @@ sudo update-command-not-found
 #Hiding mouse pointer
 sudo apt -y install unclutter
 
-#Fix Touchscreen pointing device
-sudo apt -y install xserver-xorg-input-evdev
-sudo mv /usr/share/X11/xorg.conf.d/40-libinput.conf /usr/share/X11/xorg.conf.d/40-libinput.conf_bak
-
 #Remove warning when starting any gtk+ application
 sudo apt -y install at-spi2-core
 
 #Install packages for the Python PyQt graphical user interface
-sudo apt install -y qt5-default pyqt5-dev pyqt5-dev-tools
-sudo apt install -y python3-pyqt5
-sudo apt install -y python3-pyqt5.qtwebkit
+sudo apt -y install qt5-default pyqt5-dev pyqt5-dev-tools
+sudo apt -y install python3-pyqt5
+sudo apt -y install python3-pyqt5.qtwebkit
 
 #Modifications on Bootloader
 #ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off
@@ -74,12 +70,11 @@ sudo sh -c "sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/g'
 
 #Install Skript etc
 sudo mkdir -p /usr/share/infoscreen
-sudo mv ./html/Infoscreen.py /usr/bin/Infoscreen
-sudo mv ./html/* /usr/share/infoscreen
-sudo rmdir ./html
+sudo cp -r ../src/python/GUI_Test/Infoscreen.py /usr/bin/Infoscreen
+sudo cp -r ../src/python/GUI_Test/!(Infoscreen.py) /usr/share/infoscreen
 
 #Install Splash Infoscreen
-sudo cp -r ./splashscreen/raspberry_pi /usr/share/plymouth/themes
+sudo cp -r ../src/bootloader/raspberry_pi /usr/share/plymouth/themes
 sudo plymouth-set-default-theme raspberry_pi
 sudo cp -r ./plymouth-quit.service.d /etc/systemd/system
 sudo systemctl daemon-reload
