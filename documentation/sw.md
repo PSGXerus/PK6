@@ -72,6 +72,8 @@ import os
 import sys
 ```
 
+Mit ``sys.argv[1]`` lässt sich beispielsweise der erste Parameter beim Aufruf über die Kommandozeile angeben. Das ``sys`` Modul stellt also Informationen über den Python-Interpreter zur Verfügung.
+
 **Zeit Funktionen**
 
 Beispielsweise zum endlosen Warten.
@@ -79,8 +81,6 @@ Beispielsweise zum endlosen Warten.
 ```
 import time
 ```
-
-Mit ``sys.argv[1]`` lässt sich beispielsweise der erste Parameter beim Aufruf über die Kommandozeile angeben. Das ``sys`` Modul stellt also Informationen über den Python-Interpreter zur Verfügung.
 
 **GPIO**
 
@@ -220,7 +220,7 @@ def switchPage(self, fileIndex):
         print(e)
 ```
 
-Die Methode ``switchPage`` nutzt alle erstellten globalen Methoden zur Anzeige der nächsten oder vorherigen HTML Seite. Der Parameter ``fileIndex`` bestimmt, welche der in ``fileList`` enthaltenen Dateien ausgewählt werden soll. Danach wird diese Datei geöffnet und mithilfe der ``QWebView``- Funktion ``setHTML`` in die Oberfläche geladen. Entscheidend ist dabei die Verwendung von ``QUrl`` zur Unterscheidung von lokalen und gehosteten Quelldateien. Falls der übergebene Index größer als die Länge der Dateiliste ist, wird ein ``IndexError``geschmissen. Da dieser allerdings von der Liste abhängt, kann das im Normalfall nicht passieren.
+Die Methode ``switchPage`` nutzt alle erstellten globalen Methoden zur Anzeige der nächsten oder vorherigen HTML Seite. Der Parameter ``fileIndex`` bestimmt, welche der in ``fileList`` enthaltenen Dateien ausgewählt werden soll. Danach wird diese Datei geöffnet und mithilfe der ``QWebView``- Funktion ``setHTML`` in die Oberfläche geladen. Entscheidend ist dabei die Verwendung von ``QUrl`` zur Unterscheidung von lokalen und gehosteten Quelldateien. Falls der übergebene Index größer als die Länge der Dateiliste ist, wird ein ``IndexError`` geschmissen. Da dieser allerdings von der Liste abhängt, kann das im Normalfall nicht passieren.
 
 
 ```
@@ -335,10 +335,10 @@ Das bedeutet, dass die Pin Nummern auf der Raspberry Pi Platine verwenden werden
 
 ```
 GPIO.setup(tasterPin1, GPIO.IN)
-    GPIO.setup(tasterPin2, GPIO.IN)
-    GPIO.setup(tasterPin3, GPIO.IN)
-    GPIO.setup(drehgeberPin1, GPIO.IN)
-    GPIO.setup(drehgeberPin2, GPIO.IN)
+GPIO.setup(tasterPin2, GPIO.IN)
+GPIO.setup(tasterPin3, GPIO.IN)
+GPIO.setup(drehgeberPin1, GPIO.IN)
+GPIO.setup(drehgeberPin2, GPIO.IN)
 ```
 
 <u>Schritt 4</u>: Konstanten für den Drehgeber festlegen.
