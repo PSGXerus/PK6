@@ -10,6 +10,7 @@
 - [3. Software](#3-software)
 - [4. Hardware](#4-hardware)
 - [5. Power consumption](#5-power-consumption)
+- [6. Installation](#6-installation)
 - [Appendix](#appendix)
   - [Useful webpages](#useful-webpages)
 
@@ -68,7 +69,7 @@ This document should be a guide for future participants in the project.
 	- [x] Manufacture
 	- [x] Paint
 - [x] Integrating admin access
-- [ ] Writing setup-bashscript
+- [x] Writing setup-bashscript
 
 ## 3. Software
 
@@ -85,6 +86,53 @@ This document should be a guide for future participants in the project.
 |Nominal Voltage|Measured Current|Consumed Power|
 |---------------|----------------|--------------|
 |12V            |~0.5A           |~6W           |
+
+## 6. Installation
+
+1. Download [Raspbian](https://www.raspberrypi.org/downloads/raspbian/)
+2. Put a freshly formatted micro SD card into your laptop
+3. Start a terminal
+4. Navigate with ```cd [path]``` and ```ls``` to the folder with the downloaded Image
+5. Type the following command
+
+    ```shell
+    $ sudo fdisk -l
+    ```
+
+6. Memorize the name for the SD card handle (probably /dev/mmcblk0)
+7. Type this name as the \<PATH\> in this command
+
+    **BE CAREFUL**: If \<PATH\> is not correct ```dd``` could wipe your laptops storage!!!
+    
+    ```shell
+    $ sudo umount <PATH>
+    $ sudo dd bs=1M if=./<NAME_OF_THE_IMAGE> of=<PATH>
+    ```
+7. Mount the SD cards boot partition
+8. Add the following to the end of *cmdline.txt* on the boot partition, with \<IP\>, \<GATEWAY\> and \<BROADCAST\> set as desired
+
+    ```
+    ip=<IP>::<GATEWAY>:<BROADCAST>:rpi:eth0:off
+    ```
+9. Add the following to the end of *config.txt* on the boot partition
+
+    ```
+    dtoverlay=gpio-poweroff,active_low="y"
+    dtoverlay=gpio-shutdown,gpio_pin=20
+    ```
+10. Unmount the SD card and put it into the Raspberry Pi you want to use in the kiosk
+11. Boot and open a terminal
+12. Use the following commands
+
+    ```shell
+    $ passwd
+    # Set a password
+    # Check if network is available
+    $ ping 8.8.8.8
+    $ git clone https://github.com/PSGXerus/PK6_2018.git
+    $ cd PK6_2018/install
+    $ sudo ./initialize_pi.sh &> ~/install.log
+    ```
 
 ## Appendix
 
