@@ -18,7 +18,7 @@ if [ $(dirname $0) != "." ]; then
 fi
 
 #Pre Boot Modifications
-sudo echo -e "max_usb_current=1\nhdmi_group=2\nhdmi_mode=1\nhdmi_mode=87\nhdmi_cvt 1024 600 6 0 0 0 >> /boot/config.txt"
+sudo echo -e "max_usb_current=1\nhdmi_group=2\nhdmi_mode=1\nhdmi_mode=87\nhdmi_cvt 1024 600 6 0 0 0" >> /boot/config.txt
 
 #Uninstall unused software
 sudo apt -y remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
