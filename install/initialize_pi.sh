@@ -21,25 +21,25 @@ fi
 sudo echo -e "max_usb_current=1\nhdmi_group=2\nhdmi_mode=1\nhdmi_mode=87\nhdmi_cvt 1024 600 6 0 0 0" >> /boot/config.txt
 
 #Uninstall unused software
-sudo apt -y remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
-sudo apt -y autoremove
-sudo apt update
-sudo apt -y upgrade
+sudo apt -qqy remove --purge libreoffice* wolfram-engine minecraft-pi sonic-pi python3-numpy smartsim timidity scratch nuscratch python3-pygame python-pygame python-tk python-picraft bluej claws-mail greenfoot nodered geany xpdf
+sudo apt -qqy autoremove
+sudo apt -qq update
+sudo apt -qqy upgrade
 
 #Usefull tool for missing packages
-sudo apt -y install command-not-found
+sudo apt -qqy install command-not-found
 sudo update-command-not-found
 
 #Hiding mouse pointer
-sudo apt -y install unclutter
+sudo apt -qqy install unclutter
 
 #Remove warning when starting any gtk+ application
-sudo apt -y install at-spi2-core
+sudo apt -qqy install at-spi2-core
 
 #Install packages for the Python PyQt graphical user interface
-sudo apt -y install qt5-default pyqt5-dev pyqt5-dev-tools
-sudo apt -y install python3-pyqt5
-sudo apt -y install python3-pyqt5.qtwebkit
+sudo apt -qqy install qt5-default pyqt5-dev pyqt5-dev-tools
+sudo apt -qqy install python3-pyqt5
+sudo apt -qqy install python3-pyqt5.qtwebkit
 
 #Modifications on Bootloader
 #ip=10.27.210.71::10.27.64.1:255.255.0.0:rpi:eth0:off
@@ -58,7 +58,7 @@ echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 0" > /home/pi/.conf
 ### SSH Configuration
 #Activate SSH Server
 #
-sudo apt -y install ssh
+sudo apt -qqy install ssh
 sudo /etc/init.d/ssh start
 sudo update-rc.d ssh defaults
 #
