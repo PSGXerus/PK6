@@ -68,17 +68,20 @@ sudo sh -c "sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/g'
 
 #Install Skript etc
 sudo mkdir -p /usr/share/infoscreen
-sudo cp -r ../src/python/GUI_Test/Infoscreen.py /usr/bin/Infoscreen
 sudo cp ../src/python/GUI_Test/* /usr/share/infoscreen
 sudo rm /usr/share/infoscreen/Infoscreen.py
+python3 -m compileall ../src/python/GUI_Test/
+sudo cp ../src/python/GUI_Test/__pycache__/* /usr/share/infoscreen/Infoscreen.pyc
+rm -rf ../src/python/GUI_Test/__pycache__
+sudo cp ./Infoscreen /usr/bin/
 
 #Install Splash Infoscreen
 sudo cp -r ../src/bootloader/raspberry_pi /usr/share/plymouth/themes
 sudo plymouth-set-default-theme raspberry_pi
-sudo cp -r ./plymouth-quit.service.d /etc/systemd/system
+sudo cp -r ../src/bootloader/plymouth-quit.service.d /etc/systemd/system
 sudo systemctl daemon-reload
 
 #Remove Sudo Rights for User
-sudo rm /etc/sudoers.d/010.pi-nopasswd
+sudo rm /etc/sudoers.d/010_pi-nopasswd
 
 sudo reboot
