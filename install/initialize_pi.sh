@@ -58,9 +58,11 @@ echo -e "@Infoscreen /usr/share/infoscreen\n@unclutter -idle 0\n@xset s noblank\
 sudo apt -qqy install ssh
 sudo /etc/init.d/ssh start
 sudo update-rc.d ssh defaults
+sudo touch /boot/ssh
 #
 #Allow Root Permissions via SSH
-sudo sh -c "sed -i -e 's/PermitRootLogin without-password/PermitRootLogin yes/g' /etc/ssh/sshd_config"
+sed -i -e 's/^[#]*PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i -e 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 ###
 
 #Install Skript etc
